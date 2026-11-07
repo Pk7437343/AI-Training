@@ -1,4 +1,5 @@
 AI-Training
+
 Training → Classwork and examples
 Assignments → Practice exercises and solutions
 Day 1 – Python Basics
@@ -166,3 +167,10 @@ FastAPI
 Pydantic
 REST APIs
 ETL Processing
+Git & GitHub
+Author
+
+Prince Kumar
+ GitHub: https://github.com/Pk7437343
+
+This repository contains all training materials, assignments, solutions, datasets, and projects completed during the AI Training Program.

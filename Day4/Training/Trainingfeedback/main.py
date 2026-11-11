@@ -16,7 +16,8 @@ def home():
         "message": "fff"
     }
 
-Base.metadata.create_all(bind=engine)
+Base.metadata.create_all(bind=engine)  
+#Whatever tables are defined in the models, if they aren't in the database, create them.
 
 @app.get("/employees", response_model=list[EmployeeResponse])
 def getallemployee():
@@ -27,4 +28,3 @@ def getallemployee():
 def getEmployeesById(employee_id:int):
   db = SessionLocal()
   return service.get_employee_by_id(db, employee_id)
-

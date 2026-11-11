@@ -21,6 +21,7 @@ class EmployeeUpdate(EmployeeBase):
 class EmployeeResponse(EmployeeBase):
     employee_id:int
     model_config=ConfigDict(from_attributes=True)
+    #SQLAlchemy object ko Pydantic object me convert karti hai.
    
 class DepartmentCount(BaseModel):
     department:str

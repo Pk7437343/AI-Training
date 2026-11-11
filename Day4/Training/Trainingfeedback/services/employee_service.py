@@ -23,10 +23,10 @@ def add_employee(db: Session, data):
         raise
  
 #2. Display all employees
-def get_all_employees(db: Session):
-    return db.scalars(
+def get_all_employees(db: Session ):#session object receive
+    return db.scalars( #get only objects otherwise getting tupples
         select(Employee).order_by(Employee.employee_id)
-    ).all()
+    ).all() #convert all objects into list
  
 #3. Search employee byID
 def get_employee_by_id(db: Session, employee_id: int):

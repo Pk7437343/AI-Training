@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
  
-employees = pd.read_excel("coforge_employees_50.xlsx")
+employees = pd.read_csv("coforge_employees_50.csv")
 projects = pd.read_csv("coforge_projects.csv")
  
 print(employees.head())

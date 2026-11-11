@@ -21,7 +21,7 @@ print("dtype  :", salary.dtype)
 minimum_balance = salary.min()
 print(minimum_balance)
 
-maximum_balance = salary.min()
+maximum_balance = salary.max()
 print(maximum_balance)
 
 #Calculate sum, mean, median and standard deviation of balances. 
@@ -42,7 +42,7 @@ print("Salary above 500000", salary[salary>50000])
 
 # Identify credit scores below 650 using boolean masking. 
 credit = np.array(df.Credit_Score)
-print("Credit_score", credit<650)
+print("Credit_score", credit<650)    
 
 # Sort balances ascending and descending. 
 ascending = np.sort(salary)
@@ -54,7 +54,7 @@ print(descending)
 
 #print("sorted salary", salary.sort())
 
-print("sorted salary", df["Account_Balance"].sort_values(ascending=False))
+print("sorted salary", df["Account_Balance"].sort_values(ascending=False)) #pandas
 
 # Compute total monthly deposits and total monthly withdrawals. 
 
@@ -133,7 +133,7 @@ summarize_credit = np.unique(df["Credit_Score"])
 print("summarize credit score ", len(summarize_credit))
 # 16. Use np.argsort to locate the five largest balances. 
 
-five_largest = np.argsort(salary)
+five_largest = np.argsort(salary) #return index
 print("the five largest : ", salary[five_largest[-5:]])
 
 # 17. Perform min-max normalization of balances; handle constant arrays safely. 
@@ -148,7 +148,20 @@ else:
     z_score = np.zeros(len(salary))
  
 print(z_score)
-# 18. Compute z-scores for balances; handle zero standard deviation safely. 
+# 18. Compute z-scores for balances; handle zero standard deviation safely.
+
+mean = np.mean(salary)
+std = np.std(salary)
+
+if std != 0:
+    z_score = (salary - mean) / std
+else:
+    z_score = np.zeros(len(salary))
+
+print(z_score) 
+
+
+#19
 data = np.column_stack((
     salary,
     df['Monthly_Deposit'],
@@ -220,7 +233,7 @@ active_acc =df[
     (df["Account_Status"]=="Active") & 
     (df["Account_Type"]=="Savings")]
 print("account status", active_acc)
-# 29. Sort by balance and monthly income, descending. 
+ # 29. Sort by balance and monthly income, descending. 
 
 sort_bal_income = df.sort_values(
     by=["Account_Balance", "Monthly_Income"], ascending=False)
@@ -295,7 +308,7 @@ bins = [17, 25, 40,60, float('inf')]
 labels = ['18-25', '26-40', '41-60', '61+']
 
 df["Age_Group"] = pd.cut(
-    df["Age"],
+    df["Age"], 
     bins = bins,
     labels= labels
 )

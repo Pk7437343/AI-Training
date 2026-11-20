@@ -229,4 +229,16 @@ print(multi_df)
 #47#
 # 47. Calculate cumulative Salary by department after sorting by Salary.
 print(employees.sort_values(["Department","Salary"]).groupby("Department")["Salary"].cumsum())
+
+print(employees.groupby("Department")[["Salary", "Bonus"]].sum())
+ 
+
+print(employees.groupby("Department")["TrainingHours"].mean())
+ 
+
+print(employees[employees["LeaveDays"] > 15])
+ 
+
+print(employees["Salary"].corr(employees["ExperienceYears"]))
+
  

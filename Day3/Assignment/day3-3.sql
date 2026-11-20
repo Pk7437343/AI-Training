@@ -129,171 +129,6 @@ select department_id from employees group by department_id having count(employee
  
 select department_id,avg(base_salary) from employees group by department_id having avg(base_salary)>80000;
  
-
-
--- Q014. Display all project names, statuses and budgets. 
-
--- Q015. List payroll records with calculated net_pay. 
-
--- Level 2 — Filtering, sorting and functions 
-
--- Q016. Find employees with base_salary greater than 90000. 
-
--- Q017. Find employees earning between 60000 and 110000. 
-
--- Q018. Find employees hired on or after 2024-01-01. 
-
--- Q019. List active employees only. 
-
--- Q020. Find employees whose first name begins with A. 
-
--- Q021. Find employees whose last name contains a. 
-
--- Q022. Find employees in department IDs 1, 3 or 5. 
-
--- Q023. Find employees with no manager assigned. 
-
--- Q024. List employees sorted by salary highest first. 
-
--- Q025. Show the five highest-paid employees. 
-
--- Q026. List projects with a NULL end_date. 
-
--- Q027. Find projects with budgets above 7000000. 
-
--- Q028. Find payroll records whose payment_status is Pending. 
-
--- Q029. List employees hired during calendar year 2025 using a date range. 
-
--- Q030. Display employee names in uppercase. 
-
--- Q031. Show the length of each employee first name. 
-
--- Q032. Show each employee hire year using YEAR(). 
-
--- Q033. Display salaries rounded to the nearest thousand. 
-
--- Q034. Show employees whose designation is Analyst or Associate. 
-
--- Q035. Show active employees ordered by department and salary descending. 
-
--- Level 3 — Aggregations, GROUP BY and HAVING 
-
--- Q036. Count all employees. 
-
--- Q037. Count active and inactive employees separately. 
-
--- Q038. Find minimum, maximum and average base salary. 
-
--- Q039. Calculate the total monthly base salary of all employees. 
-
--- Q040. Count employees in each department_id. 
-
--- Q041. Find average base salary by department_id. 
-
--- Q042. Find highest base salary in each department_id. 
-
--- Q043. Find departments with more than four employees using HAVING. 
-
--- Q044. Find departments whose average salary exceeds 80000. 
-
--- Q045. Count employees by designation. 
-
--- Q046. Find designations with at least three employees. 
-
--- Q047. Calculate total net payroll for each pay_month. 
-
--- Q048. Calculate total bonus paid for each pay_month. 
-
--- Q049. Find payroll months with total deductions above 200000. 
-
--- Q050. Count Paid versus Pending payroll rows by month. 
-
--- Q051. Find the average budget of Active projects. 
-
--- Q052. Count projects by project_status. 
-
--- Q053. Find project statuses with more than one project. 
-
--- Q054. Calculate total project budget by project_type. 
-
--- Q055. Find departments where the maximum employee salary exceeds 120000. 
-
--- Level 4 — Two-table joins and reporting 
-
--- Q056. INNER JOIN Employees and Departments to show employee full name and department name. 
-
--- Q057. Show employee name, designation and department location using a two-table join. 
-
--- Q058. List all employees in the Technology department using a join. 
-
--- Q059. Show employee name, department name and base salary, ordered by salary. 
-
--- Q060. Count employees per department using Employees JOIN Departments. 
-
--- Q061. Show department name and average employee salary using JOIN and GROUP BY. 
-
--- Q062. Find department names with at least five employees using JOIN, GROUP BY and HAVING. 
-
--- Q063. JOIN Employees and Payroll to show employee name, pay_month and net_pay. 
-
--- Q064. Find employees whose October 2026 payroll is Pending using two tables. 
-
--- Q065. Show employee names and bonuses for September 2026. 
-
--- Q066. Find total net_pay for each employee across three months using Employees and Payroll. 
-
--- Q067. Show the five employees with the highest total net_pay across all months. 
-
--- Q068. JOIN EmployeeProjects and Projects to show project names and assignment roles. 
-
--- Q069. JOIN Employees and EmployeeProjects to list employees and their allocation percentages. 
-
--- Q070. Count assigned employees per project using Projects and EmployeeProjects. 
-
--- Q071. Use LEFT JOIN to list every project, including projects with no assignments. 
-
--- Q072. Use LEFT JOIN to find employees who have no project assignments. 
-
--- Q073. Use a self JOIN on Employees to show each employee and their manager name. 
-
--- Q074. Use LEFT self JOIN to include managers who have no manager_id. 
-
--- Q075. Show employees whose manager earns less than they do using a self JOIN. 
-
--- Level 5 — Multi-table joins, subqueries and analytics 
-
--- Q076. Join Employees, Departments and Payroll to show employee, department, month and net pay. 
-
--- Q077. Find total net payroll by department for October 2026 using three tables. 
-
--- Q078. Find departments with October 2026 total net payroll greater than 500000. 
-
--- Q079. Join Employees, EmployeeProjects and Projects to list each employee with project name and role. 
-
--- Q080. Find all Active projects and the names of employees assigned to them. 
-
--- Q081. Show the number of distinct projects per employee using a three-table join. 
-
--- Q082. Find employees assigned to two or more projects using GROUP BY and HAVING. 
-
--- Q083. Show department names and number of distinct projects worked on by their employees. 
-
--- Q084. Find the highest-paid employee in each department using a correlated subquery. 
-
--- Q085. Find employees whose base_salary is above the overall average salary. 
-
--- Q086. Find employees earning more than their own department average using a correlated subquery. 
-
--- Q087. Find projects with budgets above the average project budget. 
-
--- Q088. Find employees who have never received a bonus using NOT EXISTS. 
-
--- Q089. Find employees who have at least one Pending payroll record using EXISTS. 
-
--- Q090. Find employees assigned to projects whose budget exceeds 8000000 using IN or EXISTS. 
-
-
 select designation,count(employee_id) from employees group by designation;
  
 select designation from employees group by designation having count(employee_id)>=3;
@@ -720,4 +555,138 @@ WHERE EXISTS
 
 -- Q100. Rank employees by base salary within each department using DENSE_RANK(). 
 
+ select *
+from employees e
+where exists
+(
+select 1
+from employeeprojects ep
+join projects p
+on ep.project_id = p.project_id
+where ep.employee_id = e.employee_id
+and p.budget > 8000000
+);
  
+select employee_id,
+first_name,
+base_salary,
+case
+when base_salary >= 100000 then 'High'
+when base_salary >= 70000 then 'Medium'
+else 'Low'
+end as salary_category
+from employees;
+ 
+select project_id,
+project_name,
+budget,
+case
+when budget >= 8000000 then 'Large'
+else 'Standard'
+end as budget_category
+from projects;
+ 
+with cte as
+(
+select employee_id,
+sum(net_pay) as total_net_pay
+from payroll
+group by employee_id
+)
+select *
+from cte
+order by total_net_pay desc
+limit 10;
+ 
+with cte as
+(
+select department_id,
+avg(base_salary) as avg_salary
+from employees
+group by department_id
+)
+select *
+from cte
+where avg_salary >
+(
+select avg(base_salary)
+from employees
+);
+ 
+select d.department_name,
+count(distinct e.employee_id) as employee_count,
+avg(e.base_salary) as avg_salary,
+coalesce(sum(p.net_pay),0) as october_payroll
+from departments d
+left join employees e
+on d.department_id = e.department_id
+left join payroll p
+on e.employee_id = p.employee_id
+and p.pay_month = '2026-10-01'
+group by d.department_id,d.department_name;
+ 
+select p.project_name,
+count(ep.employee_id) as total_employees
+from projects p
+join employeeprojects ep
+on p.project_id = ep.project_id
+group by p.project_id,p.project_name
+order by total_employees desc
+limit 1;
+ 
+select e.employee_id,
+e.first_name,
+sum(ep.allocation_pct) as total_allocation
+from employees e
+join employeeprojects ep
+on e.employee_id = ep.employee_id
+group by e.employee_id,e.first_name
+having sum(ep.allocation_pct) > 100;
+ 
+with dept_avg as
+(
+select e.department_id,
+avg(p.net_pay) as avg_net_pay
+from employees e
+join payroll p
+on e.employee_id = p.employee_id
+where p.pay_month = '2026-10-01'
+group by e.department_id
+)
+select e.first_name,
+d.department_name,
+p.net_pay,
+da.avg_net_pay
+from employees e
+join departments d
+on e.department_id = d.department_id
+join payroll p
+on e.employee_id = p.employee_id
+join dept_avg da
+on e.department_id = da.department_id
+where p.pay_month = '2026-10-01';
+ 
+select d.department_name
+from departments d
+where not exists
+(
+select 1
+from employees e
+join employeeprojects ep
+on e.employee_id = ep.employee_id
+join projects p
+on ep.project_id = p.project_id
+where e.department_id = d.department_id
+and p.project_status = 'Active'
+);
+ 
+select employee_id,
+first_name,
+department_id,
+base_salary,
+dense_rank() over
+(
+partition by department_id
+order by base_salary desc
+) as salary_rank
+from employees;
